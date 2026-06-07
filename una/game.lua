@@ -56,9 +56,11 @@ local function removeCard(card)
 end
 
 local gameSettings = {
+	{name = "debugging\ndeck", bit = 4, default = false},
 	{name = "+2 on +4\nstacking", bit = 0, default = true},
 	{name = "+4 on +2\nstacking", bit = 1, default = true},
 	{name = "require\nplaying\ndrawed\ncard", bit = 2, default = true},
+	{name = "out at\n25 cards", bit = 3, default = true},
 }
 
 --[[
@@ -289,8 +291,8 @@ local sceneIntermission = Macro.new(function (events, ...)
 		end)
 
    	Sync.addPlayer(hostName)
-		-- for i = 1, 2 do
-			-- Sync.addPlayer("meow"..i)
+		-- for i = 1, 16 do
+		-- 	Sync.addPlayer("meow"..i)
 		-- end
 	end
 
@@ -704,14 +706,7 @@ local sceneGame = Macro.new(function (events, ...)
 		elseif cardType == 22 then
 			drawCards = 10
 		elseif cardType == 20 then
-			-- Reverse + 4
-
-			if Sync.getPlayersCount() <= 2 then
-				isSkip = true
-			else
-				reversePlayersOrder()
-			end
-
+			-- Reverse + 4, rest of functionality later
 			drawCards = 4
 		end
 
@@ -739,7 +734,7 @@ local sceneGame = Macro.new(function (events, ...)
 		local cardRot = Sync.getPlayerRot(currentPlayer) - 90
 		Sync.setPlayerRot("!", cardRot)
 		local isSkip = cardType == 13
-		if cardType == 12 then
+		if cardType == 12 or cardType == 20 then
 			if Sync.getPlayersCount() <= 2 then
 				isSkip = true
 			else
@@ -1168,7 +1163,11 @@ local sceneGame = Macro.new(function (events, ...)
 	end, "gameColorChanged")
 
 	Sync.events.DRAW_CARDS_COUNT_CHANGE:register(function(new, old)
-		if new >= 1 then
+		if new >= 25 then
+			drawCardsCountText:setText("{text='+"..new.."',color='#ff0000'}")
+		elseif new >= 10 then
+			drawCardsCountText:setText("{text='+"..new.."',color='#ff8888'}")
+		elseif new >= 1 then
 			drawCardsCountText:setText("+"..new)
 		end
 		local from, to = 0.6, 0.5
@@ -1257,15 +1256,19 @@ local sceneGame = Macro.new(function (events, ...)
 
 	if host:isHost() then
 		for i, name in ipairs(Sync.getPlayersOrder()) do
-			for k = 1, 7, 1 do
-				-- Sync.drawCard(name, Card.getRandomCard())
-
-			end
-
-			for t = 1, 23 do
-				for c = 1, 1 do
-					Sync.drawCard(name, Card.typeAndColorToFullId(t, c))
+			if not Sync.getBitFlag(4) then
+				for k = 1, 7, 1 do
+					Sync.drawCard(name, Card.getRandomCard())
 				end
+			else
+				for k = 1, 100, 1 do
+					Sync.drawCard(name, Card.getRandomCard())
+				end
+				-- for t = 1, 28 do
+				-- 	for c = 1, 1 do
+				-- 		Sync.drawCard(name, Card.typeAndColorToFullId(t, c))
+				-- 	end
+				-- end
 			end
 
 
@@ -1508,7 +1511,7 @@ if host:isHost() then
 
 	local title = toJson{
 		"",
-		{text = "UNA\n\n", bold = true},
+		{text = "UNA - Show 'Em No Mercy\n\n", bold = true},
 		"[LEFT]",
 		{text = " start and place game\n", color = "gray"},
 		"[RIGHT]",

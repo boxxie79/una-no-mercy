@@ -61,15 +61,22 @@ local iconUV = {
 	vec(36, 22), -- WILD    
 	vec(45,  0), -- UNKNOWN 
 	
-	vec(54, 22), -- DISCARDALL
-	vec(45, 22), -- SKIPEVERYONE
-	vec(22, 33), -- WILDREVERSEDRAW4
-	vec(31, 33), -- WILDDRAW6
-	vec(40, 33), -- WILDDRAW10
-	vec(13, 33)  -- WILDCOLORROULETTE
+	vec(73, 0-16), -- DISCARDALL
+	vec(64, 0-16), -- SKIPEVERYONE
+	vec(64, 11-16), -- WILDREVERSEDRAW4
+	vec(73, 11-16), -- WILDDRAW6
+	vec(82, 11-16), -- WILDDRAW10
+	vec(91, 11-16),  -- WILDCOLORROULETTE
+
+	vec(91, 22-16), -- WILDDISCARDALL
+	vec(64, 22-16), -- WILDREVERSEDRAW8
+	vec(64, 33-16), -- THERE'S NOTHING THE THREE OF US CAN'T ACHIEVE AT MAX POWER! VICTORY IS OURS FOR THE TAKING! TRIPLE BOOST!
+	vec(73, 33-16), -- WILDSUDDENDEATH
+	vec(82, 0-16), -- TENPLAYAGAIN
 }
+
 ---@alias CardType
----| "EMPTY" -- 1
+---| "EMPTY" -- 1 BASE GAME
 ---| "ZERO"
 ---| "ONE"
 ---| "TWO"
@@ -85,13 +92,18 @@ local iconUV = {
 ---| "DRAW2"
 ---| "DRAW4"
 ---| "WILD"
----| "UNKNOWN" -- 17
----| "DISCARDALL"
+---| "UNKNOWN" -- 17 -- END
+---| "DISCARDALL" -- 18 - NO MERCY
 ---| "SKIPEVERYONE"
 ---| "WILDREVERSEDRAW4"
 ---| "WILDDRAW6"
 ---| "WILDDRAW10"
----| "WILDCOLORROULETTE" -- 23
+---| "WILDCOLORROULETTE" -- 23 - END
+---| "WILDDISCARDALL" -- 24 - NO MERCY EXPANSION PACK
+---| "WILDREVERSEDRAW8"
+---| "WILDFINALATTACK"
+---| "WILDSUDDENDEATH" 
+---| "TENPLAYAGAIN" -- 28 -- END
 
 local index2color = {
 	"RED",
@@ -125,7 +137,13 @@ local index2type = {
 	"WILDREVERSEDRAW4",
 	"WILDDRAW6",
 	"WILDDRAW10",
-	"WILDCOLORROULETTE"
+	"WILDCOLORROULETTE",
+
+	"TENPLAYAGAIN",
+	"WILDDISCARDALL",
+	"WILDREVERSEDRAW8",
+	"WILDFINALATTACK",
+	"WILDSUDDENDEATH"
 }
 
 local color2index = {}
@@ -189,13 +207,28 @@ end
 
 local randomCardList = {}
 for color = 1, 4 do
-	for cardType = 2, 14 do
+	for cardType = 2, 15 do
 		local id = CardAPI.typeAndColorToFullId(cardType, color)
 		table.insert(randomCardList, id)
 		table.insert(randomCardList, id) -- give higher chance to colorful cards
 	end
-	table.insert(randomCardList, CardAPI.typeAndColorToFullId(15, 5))
+	for cardType = 18,19 do -- No Mercy cards
+		local id = CardAPI.typeAndColorToFullId(cardType, color)
+		table.insert(randomCardList, id)
+		table.insert(randomCardList, id) -- give higher chance to colorful cards
+	end
+	-- for cardType = 28,28 do -- No Mercy Expansion
+	-- 	local id = CardAPI.typeAndColorToFullId(cardType, color)
+	-- 	table.insert(randomCardList, id)
+	-- 	table.insert(randomCardList, id) -- give higher chance to colorful cards
+	-- end
+
+	-- Wild Cards
 	table.insert(randomCardList, CardAPI.typeAndColorToFullId(16, 5))
+	for cardType = 20, 23 do
+		table.insert(randomCardList, CardAPI.typeAndColorToFullId(cardType, 5))
+	end
+
 end
 
 ---@return number
@@ -327,8 +360,7 @@ function Card:setType(type)
 	end
 	self.type = type
 	self.model2.numbers:setUV(iconUV[type].x / UVsize.x, iconUV[type].y / UVsize.y)
-	--self.model.TopNumber:setUV(iconUV[type].x / UVsize.x, iconUV[type].y / UVsize.y)
-	--self.model.BottomNumber:setUV(iconUV[type].x / UVsize.x, iconUV[type].y / UVsize.y)
+	
 	return self
 end
 
