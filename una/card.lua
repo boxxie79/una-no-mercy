@@ -61,8 +61,8 @@ local iconUV = {
 	vec(36, 22), -- WILD    
 	vec(45,  0), -- UNKNOWN 
 	
-	vec(73, 0-16), -- DISCARDALL
-	vec(64, 0-16), -- SKIPEVERYONE
+	vec(64, 0-16), -- DISCARDALL
+	vec(73, 0-16), -- SKIPEVERYONE
 	vec(64, 11-16), -- WILDREVERSEDRAW4
 	vec(73, 11-16), -- WILDDRAW6
 	vec(82, 11-16), -- WILDDRAW10
@@ -131,14 +131,12 @@ local index2type = {
 	"DRAW4",
 	"WILD",
 	"UNKNOWN",
-
 	"DISCARDALL",
 	"SKIPEVERYONE",
 	"WILDREVERSEDRAW4",
 	"WILDDRAW6",
 	"WILDDRAW10",
 	"WILDCOLORROULETTE",
-
 	"TENPLAYAGAIN",
 	"WILDDISCARDALL",
 	"WILDREVERSEDRAW8",
@@ -313,7 +311,7 @@ function CardAPI.new(parent)
 	setmetatable(new, Card)
 	new:matrixApply()
 	cards[nextFree] = new
-	new.model2.Icon:setUVPixels(math.random(0,2)*8,0)
+	new.model2.Icon:setUVPixels(math.random(0,3)*8,0)
 	return new
 end
 

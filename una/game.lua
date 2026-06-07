@@ -700,8 +700,9 @@ local sceneGame = Macro.new(function (events, ...)
 			drawCards = 2
 		elseif cardType == 15 then
 			drawCards = 4
+		end
 		-- NO MERCY Mod Cards
-		elseif cardType == 21 then
+		if cardType == 21 then
 			drawCards = 6
 		elseif cardType == 22 then
 			drawCards = 10
@@ -709,8 +710,7 @@ local sceneGame = Macro.new(function (events, ...)
 			-- Reverse + 4, rest of functionality later
 			drawCards = 4
 		end
-
-		
+	
 
 		if Sync.getDrawCardsCount() >= 1 then
 			if drawCards == 0 then
@@ -741,6 +741,29 @@ local sceneGame = Macro.new(function (events, ...)
 				reversePlayersOrder()
 			end
 		end
+
+		if cardType == 18 then -- Discard All
+			log("Discard All")
+			local cards = Sync.getCards(currentPlayer)
+
+			local removed = 0
+			local startindex = 1
+			for index,id in pairs(cards) do
+				local subtype, subcolor = Card.fullIdToTypeAndColor(id)
+				if subcolor == color then
+					
+					log(index)
+					if not startindex then startindex = index end
+					-- Sync.removeCard(currentPlayer,index-removed)
+					removed = removed + 1
+				end
+			end
+
+			log(removed)
+			log(startindex)
+
+		end
+
 		if color == 5 then
 			Sync.setColor(6)
 		else
