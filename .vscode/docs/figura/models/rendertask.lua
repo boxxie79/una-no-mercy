@@ -996,7 +996,7 @@ function TextTask:setOpacity(opacity) end
 ---@param self self
 ---@param state? boolean
 ---@return self
-function TextTask:setOutline(state) end
+function TextTask:setOutlineColor(vec(0,0,0)):setOutline(state) end
 
 ---Sets the color of this task's outline (if enabled.)
 ---

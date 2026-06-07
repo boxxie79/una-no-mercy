@@ -344,7 +344,7 @@ local sceneGame = Macro.new(function (events, ...)
 	local drawCardsCountText = drawCardsCountModel:newText("")
 	drawCardsCountModel:setPivot(-16, 10, 0)
 
-	drawCardsCountText:setOutline(true)
+	drawCardsCountText:setOutlineColor(vec(0,0,0)):setOutline(true)
 		:setAlignment("CENTER")
 		:setScale(0.5, 0.5, 0.5)
 		:setLight(15, 15)
@@ -371,7 +371,7 @@ local sceneGame = Macro.new(function (events, ...)
 		end
 		for i = 0, 1 do
 			turnIndicator:newText("text"..i)
-				:setOutline(true)
+				:setOutlineColor(vec(0,0,0)):setOutline(true)
 				:setLight(15, 15)
 				:setText(text)
 				:setRot(0, i * 180, 0)
@@ -393,7 +393,7 @@ local sceneGame = Macro.new(function (events, ...)
 	for i = 0, 1 do
 		yourCardsIndicator:newText("text"..i)
 			:setLight(15, 15)
-			:setOutline(true)
+			:setOutlineColor(vec(0,0,0)):setOutline(true)
 			:setText("your cards")
 			:setRot(0, i * 180, 0)
 			:setAlignment("CENTER")
@@ -698,7 +698,25 @@ local sceneGame = Macro.new(function (events, ...)
 			drawCards = 2
 		elseif cardType == 15 then
 			drawCards = 4
+		-- NO MERCY Mod Cards
+		elseif cardType == 21 then
+			drawCards = 6
+		elseif cardType == 22 then
+			drawCards = 10
+		elseif cardType == 20 then
+			-- Reverse + 4
+
+			if Sync.getPlayersCount() <= 2 then
+				isSkip = true
+			else
+				reversePlayersOrder()
+			end
+
+			drawCards = 4
 		end
+
+		
+
 		if Sync.getDrawCardsCount() >= 1 then
 			if drawCards == 0 then
 				return
@@ -714,6 +732,8 @@ local sceneGame = Macro.new(function (events, ...)
 				end
 			end
 		end
+
+
 		-- drop card
 		local currentPlayer = Sync.getCurrentPlayer()
 		local cardRot = Sync.getPlayerRot(currentPlayer) - 90
@@ -1233,13 +1253,23 @@ local sceneGame = Macro.new(function (events, ...)
 		setCardStyle(currentPlayer, drawToMatchCard, cardId)
 	end, "gameDrawToMatchChange")
 
+	--starting card
+
 	if host:isHost() then
 		for i, name in ipairs(Sync.getPlayersOrder()) do
 			for k = 1, 7, 1 do
-				Sync.drawCard(name, Card.getRandomCard())
+				-- Sync.drawCard(name, Card.getRandomCard())
+
 			end
-			-- Sync.drawCard(name, Card.typeAndColorToFullId(15, 5))
-			-- Sync.drawCard(name, Card.typeAndColorToFullId(14, 5))
+
+			for t = 1, 23 do
+				for c = 1, 1 do
+					Sync.drawCard(name, Card.typeAndColorToFullId(t, c))
+				end
+			end
+
+
+
 		end
 	end
 

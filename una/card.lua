@@ -60,9 +60,16 @@ local iconUV = {
 	vec(27, 22), -- DRAW4   
 	vec(36, 22), -- WILD    
 	vec(45,  0), -- UNKNOWN 
+	
+	vec(54, 22), -- DISCARDALL
+	vec(45, 22), -- SKIPEVERYONE
+	vec(22, 33), -- WILDREVERSEDRAW4
+	vec(31, 33), -- WILDDRAW6
+	vec(40, 33), -- WILDDRAW10
+	vec(13, 33)  -- WILDCOLORROULETTE
 }
 ---@alias CardType
----| "EMPTY"
+---| "EMPTY" -- 1
 ---| "ZERO"
 ---| "ONE"
 ---| "TWO"
@@ -78,7 +85,13 @@ local iconUV = {
 ---| "DRAW2"
 ---| "DRAW4"
 ---| "WILD"
----| "UNKNOWN"
+---| "UNKNOWN" -- 17
+---| "DISCARDALL"
+---| "SKIPEVERYONE"
+---| "WILDREVERSEDRAW4"
+---| "WILDDRAW6"
+---| "WILDDRAW10"
+---| "WILDCOLORROULETTE" -- 23
 
 local index2color = {
 	"RED",
@@ -106,6 +119,13 @@ local index2type = {
 	"DRAW4",
 	"WILD",
 	"UNKNOWN",
+
+	"DISCARDALL",
+	"SKIPEVERYONE",
+	"WILDREVERSEDRAW4",
+	"WILDDRAW6",
+	"WILDDRAW10",
+	"WILDCOLORROULETTE"
 }
 
 local color2index = {}
@@ -291,6 +311,11 @@ end
 ---3 ONE    8 SIX    13 SKIP  
 ---4 TWO    9 SEVEN  14 DRAW2  
 ---5 THREE  10 EIGHT 15 DRAW4  
+
+--- 18 DISCARDALL 19 SKIPEVERYONE
+--- 20 WILDREVERSEDRAW4 21 WILDDRAW6
+--- 22 WILDDRAW10 23 WILDCOLORROULETTE
+
 ---```
 ---@param type integer
 ---@return Card
@@ -473,7 +498,7 @@ function Card:setLabel(text,scale)
 		:setText(text)
 		:setRot(90,0,0)
 		:setAlignment("CENTER")
-		:setOutline(true)
+		:setOutlineColor(vec(0,0,0)):setOutline(true)
 		:setPos(-0.5*S,0.3*INV_SCALE,(client.getTextHeight(text)*0.5-1)*S)
 	end
 	return self

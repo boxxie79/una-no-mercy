@@ -190,7 +190,7 @@ function EntityNameplate:setLight(block, sky) end
 ---@param self self
 ---@param state? boolean
 ---@return self
-function EntityNameplate:setOutline(state) end
+function EntityNameplate:setOutlineColor(vec(0,0,0)):setOutline(state) end
 
 ---Sets the color of this task's outline (if enabled.)
 ---
