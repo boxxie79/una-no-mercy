@@ -285,6 +285,8 @@ function CardAPI.new(parent)
 end
 
 
+local UVsize = textures["una.atlas"]:getDimensions()
+
 ---```
 ---
 --- 1 RED  
@@ -300,7 +302,7 @@ function Card:setColor(color)
 		error('card color "' .. color .. '" dosent exist', 1)
 	end
 	self.color = color
-	self.model2.Background:setUV(colorUV[color] / 64)
+	self.model2.Background:setUV(colorUV[color].x / UVsize.x, colorUV[color].y / UVsize.y)
 	return self
 end
 
@@ -324,9 +326,9 @@ function Card:setType(type)
 		error('card type "' .. type .. '" dosent exist', 1)
 	end
 	self.type = type
-	self.model2.numbers:setUV(iconUV[type] / 64)
-	--self.model.TopNumber:setUV(iconUV[type] / 64)
-	--self.model.BottomNumber:setUV(iconUV[type] / 64)
+	self.model2.numbers:setUV(iconUV[type].x / UVsize.x, iconUV[type].y / UVsize.y)
+	--self.model.TopNumber:setUV(iconUV[type].x / UVsize.x, iconUV[type].y / UVsize.y)
+	--self.model.BottomNumber:setUV(iconUV[type].x / UVsize.x, iconUV[type].y / UVsize.y)
 	return self
 end
 
