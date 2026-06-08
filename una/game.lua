@@ -291,9 +291,9 @@ local sceneIntermission = Macro.new(function (events, ...)
 		end)
 
    	Sync.addPlayer(hostName)
-		-- for i = 1, 16 do
-		-- 	Sync.addPlayer("meow"..i)
-		-- end
+		for i = 1, 1 do
+			-- Sync.addPlayer("meow"..i)
+		end
 	end
 
 	local timer = 0
@@ -768,11 +768,15 @@ local sceneGame = Macro.new(function (events, ...)
 			Sync.setColor(6)
 		else
 			Sync.setColor(color)
-			nextPlayer()
+			if cardType ~= 19 then
+				nextPlayer()
+			end
 		end
+
 		if isSkip then
 			nextPlayer()
 		end
+
 		if drawCards >= 1 then
 			Sync.setDrawCardsCount(Sync.getDrawCardsCount() + drawCards)
 		end
